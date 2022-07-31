@@ -1,0 +1,46 @@
+{% if user.is_authenticated %}
+    <a href="{% url 'acc:index' %}" class="menu">HOME</a>
+    <a href="{% url 'board:index' %}" class="menu">BOARD</a>
+    <a href="{% url 'acc:logout' %}" class="menu">LOGOUT</a>
+    <a href="{% url 'acc:profile' %}" class="menu">PROFILE</a>
+    <a href="{% url 'vote:index' %}" class="menu">VOTE</a>
+{% else %}
+    <a href="{% url 'acc:index' %}" class="menu">HOME</a>
+    <a href="{% url 'acc:login' %}" class="menu">LOGIN</a>
+    <a href="{% url 'acc:signup' %}" class="menu">SIGNUP</a>
+{% endif %}
+
+<h5>접속중인 계정 <b>{{ user }}</b><h5>
+<hr>
+
+{% for i in messages %}
+    <b>{{i.tags|upper}}</b> {{i.message}} <br>
+{% endfor%}
+<hr>
+
+{% if user.is_authenticated %}
+    {% block con %}
+        <h1>이미 인증된 사용자 입니다.</h1>
+        <a href="{% url 'board:index' %}"><button>BOARD</button></a>
+        <a href="{% url 'vote:index' %}"><button>VOTE</button></a>
+    {% endblock %}
+{% else %}
+    {% block noauth %}
+        <h1>로그인이 필요한 페이지 입니다</h1>
+        <a href="{% url 'acc:login' %}"><button>LOGIN</button></a>
+        <a href="{% url 'acc:signup' %}"><button>SIGNIP</button></a>
+    {% endblock %}
+{% endif %}
+
+<style>
+    .menu {
+        text-decoration: none;
+        font-size: 25px;
+        color: black;
+        font-weight: bold;
+        margin-right: 30px;
+    }
+    .menu:hover{
+        color:green;
+    }
+</style>

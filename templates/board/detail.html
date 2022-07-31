@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <h1>{{ b.subject }}</h1>    
+
+    <img src="{{ b.writer.getpic }}" width="200px">
+    <div>written by <b>{{ b.writer }}</b></div>
+    <div>{{ b.pubdate|date:'Y년 n월 j일 H:i' }}</div>
+
+    <textarea cols="60" rows="8" disabled>{{ b.content }}</textarea>
+    <br><br>
+    
+    {% if user in b.likey.all %}
+        <a href="{% url 'board:unlikey' b.id %}"><button>좋아요취소</button></a>
+    {% else %}
+        <a href="{% url 'board:likey' b.id %}"><button>좋아요</button></a>
+    {% endif %}
+
+    {% for i in b.likey.all %}
+        <img src="{{i.getpic}}" width="50px">
+    {% endfor %}
+    <br><br>
+    {% if b.writer == user %}
+        <a href="{% url 'board:update' b.id %}"><button>수정</button></a>
+        <a href="{% url 'board:delete' b.id %}"><button>삭제</button></a>
+    {% endif %}
+
+    <a href="{% url 'board:index' %}"><button>전체목록</button><a>
+    
+    <hr>
+
+    <form method="POST" action="{% url 'board:creply' b.id %}">
+        {% csrf_token %}
+        <input type="text" name="rep" size="60" placeholder="댓글 내용 입력!!">
+        <button>댓글작성</button>
+    </form>
+
+    {% for i in rset %}
+       <img src= "{{ i.replyer.getpic }}" width="150px"> <b><mark>{{ i.replyer }}</mark></b>
+       {% if i.replyer == user %}
+            <a href="{% url 'board:dreply' b.id i.id %}"><button>댓글삭제</button></a>
+       {% endif %}
+        <br><p><textarea cols="50" rows="5" disabled>{{ i.comment }}</textarea></P>
+    {% empty %}
+        <h4>첫번째 댓글을 달아주세요 🙏</h4>
+    {% endfor %}
+
+{% endblock %}

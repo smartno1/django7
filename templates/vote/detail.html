@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    {% load mathfilters %}
+    <h1><b>{{ t.subject }}</b></h1>
+
+    <img src="{{ t.maker.getpic }}" width="100px">
+    게시자 : <b>{{ t.maker }}</b> <br><br>
+    <textarea cols="50" rows="5" disabled>{{ t.content }}</textarea>
+
+    <hr>
+    {% if user in t.voter.all %}
+
+        {% for i in cset %}
+            <b>{{ i.name }}</b> <sup><b>{{ i.num|div:t.voter.count|mul:100|floatformat:2 }}%</b></sup> <br><br>
+        {% endfor%}
+
+    {% else %}
+        <form method='post' action="{% url 'vote:vote' t.id %}">
+            {% csrf_token %}
+            {% for i in cset %}
+                <input type="radio" name="cho" value="{{i.id}}" {% if forloop.first %} checked {% endif %}>{{ i.name }}<br><br>
+                <!-- radio 는 name 이 같을때 한개만 체크가능-->
+            {% endfor%}
+            <button>투표하기</button>
+        </form>
+    {% endif %}
+{% endblock %}

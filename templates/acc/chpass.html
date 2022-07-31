@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block con %}
+
+<h1>CHANGEPASSWORD PAGE</h1>
+
+<form method="post">
+    {% csrf_token %}
+    NEW PASSWORD<input type="password" name="npass"><br><br>
+    CONFIRM PASSWORD<input type="password" name="cfpass"><br><br>
+    <button>패스워드변경</button>
+</form>
+
+{% endblock %}
